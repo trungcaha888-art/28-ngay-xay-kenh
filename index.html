@@ -390,15 +390,76 @@
   },{threshold:0.3});
   formObs.observe(document.getElementById('order-form'));
 
+  // Google Sheet integration
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzpK07teW-jeXVfUtUpgAGgEOkgWh-8DLGZeu_ydlnwNN094XiVQOqS0h31SFzqoqMa/exec";
+
+  function getUtmPayload() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      utm_source: p.get("utm_source") || "",
+      utm_medium: p.get("utm_medium") || "",
+      utm_campaign: p.get("utm_campaign") || "",
+      utm_content: p.get("utm_content") || "",
+      fbclid: p.get("fbclid") || "",
+      page_url: window.location.href
+    };
+  }
+
+  function submitToGoogleSheet(payload) {
+    return new Promise((resolve) => {
+      const iframeName = 'lead-frame-' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.hidden = true;
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GOOGLE_SCRIPT_URL;
+      form.target = iframeName;
+      form.hidden = true;
+      Object.entries(payload).forEach(([key, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+      document.body.append(iframe, form);
+      form.submit();
+      setTimeout(() => { iframe.remove(); form.remove(); resolve(); }, 1200);
+    });
+  }
+
   // Form submit
-  function submitForm(){
-    const name=document.getElementById('fullname').value.trim();
-    const phone=document.getElementById('phone').value.trim();
-    if(!name||!phone){alert('Vui lòng nhập đầy đủ họ tên và số điện thoại!');return}
+  async function submitForm() {
+    const name = document.getElementById('fullname').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const product = document.getElementById('product').value.trim();
+    if (!name || !phone) { alert('Vui lòng nhập đầy đủ họ tên và số điện thoại!'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    const oldText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '⏳ Đang xử lý...';
+
+    const payload = {
+      name: name,
+      phone: phone,
+      email: product,
+      timestamp: new Date().toLocaleString('vi-VN'),
+      source: '28-ngay-xay-kenh',
+      ...getUtmPayload()
+    };
+
+    try {
+      await submitToGoogleSheet(payload);
+    } catch (e) { /* fallback */ }
+
+    btn.disabled = false;
+    btn.textContent = oldText;
     document.getElementById('successModal').classList.add('active');
-    document.getElementById('fullname').value='';
-    document.getElementById('phone').value='';
-    document.getElementById('product').value='';
+    document.getElementById('fullname').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('product').value = '';
   }
   </script>
 </body>
