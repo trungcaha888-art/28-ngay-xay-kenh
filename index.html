@@ -323,12 +323,23 @@
   <a href="tel:0388360363" class="floating-phone" aria-label="Gọi điện">📞</a>
   <div class="floating-cta" id="floatingCta" onclick="document.getElementById('order-form').scrollIntoView({behavior:'smooth'})">🔥 ĐĂNG KÝ NGAY — 5.000.000đ</div>
 
-  <!-- MODAL -->
+  <!-- MODAL THANH TOÁN -->
   <div class="modal-overlay" id="successModal">
-    <div class="modal-box">
+    <div class="modal-box" style="max-width:420px">
       <div class="modal-box__icon">🎉</div>
       <div class="modal-box__title">ĐĂNG KÝ THÀNH CÔNG!</div>
-      <div class="modal-box__desc">Cảm ơn bạn đã đăng ký chương trình 28 Ngày Xây Kênh! Trung Caha sẽ liên hệ bạn trong 30 phút tới.</div>
+      <div class="modal-box__desc">Vui lòng chuyển khoản theo thông tin bên dưới để hoàn tất đăng ký.</div>
+      <div style="margin:20px 0;text-align:center">
+        <img src="qr-code.jpg" alt="QR Code thanh toán" style="width:200px;border-radius:12px;border:2px solid rgba(0,212,255,0.3);background:#fff;padding:4px">
+      </div>
+      <div style="background:rgba(0,212,255,0.06);border-radius:12px;padding:16px;text-align:left;font-size:0.9rem;line-height:2;color:#b0b8c8">
+        <p><strong style="color:#fff">Ngân hàng:</strong> MSB (Maritime Bank)</p>
+        <p><strong style="color:#fff">Chủ TK:</strong> NGUYEN THANH TRUNG</p>
+        <p><strong style="color:#fff">Số TK:</strong> 03001017825423</p>
+        <p><strong style="color:#fff">Số tiền:</strong> <span style="color:#00d4ff;font-weight:700">5.000.000 VNĐ</span></p>
+        <p><strong style="color:#fff">Nội dung CK:</strong> <span style="color:#00d4ff">28NGAY + SĐT</span></p>
+      </div>
+      <p style="font-size:0.8rem;color:#6b7280;margin-top:12px">Sau khi chuyển khoản, Trung Caha sẽ liên hệ xác nhận trong 30 phút.</p>
       <button class="modal-box__close" onclick="document.getElementById('successModal').classList.remove('active')">Đóng</button>
     </div>
   </div>
